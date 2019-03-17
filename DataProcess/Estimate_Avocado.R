@@ -3,7 +3,6 @@
 
 #library
 library(data.table)
-
 avoc_org<-fread("avocado.csv")
 avoc_new<-avoc_org[,2:14]
 avoc_new<-avoc_new[year==2017|year==2018]
@@ -13,9 +12,18 @@ setnames(price, ".", "SingleAVGPrice")
 
 nontype<-dcast(avoc_new,region~ .,mean,value.var=c('AveragePrice'))
 setnames(nontype, ".", "NonTypeAvgPrice")
+nontype$type<-'None'
 
-setkey(nontype, region)
-setkey(price, region)
-new_price<-merge(price, nontype)
+nonprice_new<-nontype$region
+nonprice_new<-data.table(nonprice_new)
+setnames(nonprice_new, "nonprice_new", "region")
+nonprice_new$type<-nontype$type
+nonprice_new$SingleAVGPrice<-nontype$SingleAVGPrice
 
-fwrite(new_price, "AvocadoPrice.csv")
+Avocado<-rbind(price, nonprice_new)
+
+attach(Avocado)
+Avocado <- Avocado[order(region),] 
+detach(Avocado)
+
+fwrite(Avocado, "AvocadoPrice.csv")
