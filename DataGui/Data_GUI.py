@@ -52,7 +52,7 @@ class Avocado_GUI:
                                      command = self.compare).grid(row=2,column=3)
 
         # result
-        self.result01 = tkinter.Label(self.main_window,text='The single price is').grid(column=0,columnspan=3)
+        self.result01 = tkinter.Label(self.main_window,text='The single average price is').grid(column=0,columnspan=3)
 
         tkinter.mainloop()
 
@@ -62,8 +62,9 @@ class Avocado_GUI:
         t = self.v2.get()
         p = float(self.price_entry.get())
         rtp = Data_process.readinuser(r,t,p)
-        output = Data_process.compare_price(rtp,p)
-        #laabel = tkinter.Label(self.main_window,text=output).grid(row=3,column=3)
+        output1 = Data_process.compare_price(rtp,p)
+        output = Data_process.dic[rtp]
+        laabel = tkinter.Label(self.main_window,text=output).grid(row=3,column=3)
 
 
 
